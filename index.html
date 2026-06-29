@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>EchoBridge</title>
+    <link rel="icon" href="icon.png" type="image/png">
+    <link rel="apple-touch-icon" href="icon.png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#08080c">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-wrapper">
+        <header class="app-header">
+            <div class="brand">
+                <div class="brand-icon"><i class="fa-solid fa-wave-square"></i></div>
+                <h1 class="app-title">EchoBridge</h1>
+            </div>
+            <div class="header-actions" style="display: flex; gap: 8px;">
+                <button class="icon-btn btn-history" title="Geçmiş"><i class="fa-solid fa-clock-rotate-left"></i></button>
+                <button class="icon-btn" title="Ayarlar"><i class="fa-solid fa-sliders"></i></button>
+            </div>
+        </header>
+
+        <main class="app-content">
+            <!-- Kaynak Kart (Üst) -->
+            <div class="translation-card source-card" id="card-source">
+                <div class="card-header">
+                    <div class="lang-badge" id="badge-source">
+                        <span class="flag" id="flag-source">🇹🇷</span>
+                        <span class="lang-title" id="title-source">Türkçe</span>
+                        <i class="fa-solid fa-chevron-down chevron"></i>
+                    </div>
+                    <div class="card-actions">
+                        <button class="action-btn" title="Seslendir"><i class="fa-solid fa-volume-high"></i></button>
+                        <button class="action-btn btn-clear" title="Temizle"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <textarea id="text-source" placeholder="Metin yazın veya mikrofona basın..." maxlength="500"></textarea>
+                    <div class="char-count" id="char-count">0/500</div>
+                    <div class="loading-overlay hidden" id="loading-source"><div class="spinner"></div></div>
+                </div>
+            </div>
+
+            <!-- Swap Butonu -->
+            <div class="swap-wrapper">
+                <button class="swap-btn" title="Dilleri Değiştir">
+                    <i class="fa-solid fa-arrow-right-arrow-left"></i>
+                </button>
+            </div>
+
+            <!-- Hedef Kart (Alt) -->
+            <div class="translation-card target-card" id="card-target">
+                <div class="card-header">
+                    <div class="lang-badge" id="badge-target">
+                        <span class="flag" id="flag-target">🇨🇳</span>
+                        <span class="lang-title" id="title-target">Çince</span>
+                        <i class="fa-solid fa-chevron-down chevron"></i>
+                    </div>
+                    <div class="card-actions">
+                        <button class="action-btn btn-share" title="Paylaş"><i class="fa-solid fa-share-nodes"></i></button>
+                        <button class="action-btn" title="Seslendir"><i class="fa-solid fa-volume-high"></i></button>
+                        <button class="action-btn btn-copy" title="Kopyala"><i class="fa-solid fa-copy"></i></button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <textarea id="text-target" placeholder="Çeviri burada görünecek..." readonly></textarea>
+                    <div class="loading-overlay hidden" id="loading-target"><div class="spinner"></div></div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="app-footer">
+            <button class="mic-btn mic-green" id="btn-source">
+                <i class="fa-solid fa-microphone"></i>
+                <span id="label-source">TR</span>
+            </button>
+            <button class="mic-btn mic-red" id="btn-target">
+                <i class="fa-solid fa-microphone"></i>
+                <span id="label-target">ZH</span>
+            </button>
+        </footer>
+
+        <!-- Geçmiş Modalı -->
+        <div id="history-modal" class="modal hidden">
+            <div class="modal-overlay"></div>
+            <div class="modal-sheet">
+                <div class="sheet-header">
+                    <h3>Çeviri Geçmişi</h3>
+                    <button class="close-btn btn-close-history">Bitti</button>
+                </div>
+                <div class="sheet-content" id="history-list">
+                    <div class="history-empty">Henüz çeviri yapılmadı.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ayarlar: Hedef Dil Seçimi -->
+        <div id="settings-modal" class="modal hidden">
+            <div class="modal-overlay"></div>
+            <div class="modal-sheet">
+                <div class="sheet-header">
+                    <h3 id="modal-title">Ayarlar & Dil</h3>
+                    <button class="close-btn btn-close-settings">Bitti</button>
+                </div>
+                
+                <div class="settings-section">
+                    <h4>Ses Hızı</h4>
+                    <div class="speed-controls">
+                        <button class="speed-btn" data-speed="0.75">Yavaş</button>
+                        <button class="speed-btn active" data-speed="1.0">Normal</button>
+                        <button class="speed-btn" data-speed="1.25">Hızlı</button>
+                    </div>
+                </div>
+
+                <div class="settings-section" style="display: flex; flex-direction: column; flex: 1; min-height: 0;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <h4 style="margin: 0;">Hedef Dil</h4>
+                        <div class="search-box">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="lang-search" placeholder="Dil ara...">
+                        </div>
+                    </div>
+                    <div class="sheet-content" id="lang-list" style="flex: 1; overflow-y: auto;">
+                        <!-- Diller JS ile dinamik yüklenecek -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('SW kayıtlı:', reg.scope))
+                    .catch(err => console.log('SW hata:', err));
+            });
+        }
+    </script>
+</body>
+</html>
