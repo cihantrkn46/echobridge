@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>EchoBridge</title>
+    <link rel="icon" href="icon.png" type="image/png">
+    <link rel="apple-touch-icon" href="icon.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-wrapper">
+        <header class="app-header">
+            <div class="brand">
+                <div class="brand-icon"><i class="fa-solid fa-wave-square"></i></div>
+                <h1 class="app-title">EchoBridge</h1>
+            </div>
+            <button class="icon-btn" onclick="toggleSettings()" title="Ayarlar"><i class="fa-solid fa-sliders"></i></button>
+        </header>
+
+        <main class="app-content">
+            <!-- Kaynak Kart (Üst) -->
+            <div class="translation-card source-card" id="card-source">
+                <div class="card-header">
+                    <div class="lang-badge" onclick="toggleSettings()">
+                        <span class="flag" id="flag-source">🇹🇷</span>
+                        <span class="lang-title" id="title-source">Türkçe</span>
+                        <i class="fa-solid fa-chevron-down chevron"></i>
+                    </div>
+                    <div class="card-actions">
+                        <button class="action-btn" onclick="speakText('source')" title="Seslendir"><i class="fa-solid fa-volume-high"></i></button>
+                        <button class="action-btn btn-clear" onclick="clearAll()" title="Temizle"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <textarea id="text-source" placeholder="Metin yazın veya mikrofona basın..." oninput="autoTranslate()"></textarea>
+                    <div class="loading-overlay hidden" id="loading-source"><div class="spinner"></div></div>
+                </div>
+            </div>
+
+            <!-- Swap Butonu -->
+            <div class="swap-wrapper">
+                <button class="swap-btn" onclick="swapLanguages()" title="Dilleri Değiştir">
+                    <i class="fa-solid fa-arrow-right-arrow-left"></i>
+                </button>
+            </div>
+
+            <!-- Hedef Kart (Alt) -->
+            <div class="translation-card target-card" id="card-target">
+                <div class="card-header">
+                    <div class="lang-badge" onclick="toggleSettings()">
+                        <span class="flag" id="flag-target">🇨🇳</span>
+                        <span class="lang-title" id="title-target">Çince</span>
+                        <i class="fa-solid fa-chevron-down chevron"></i>
+                    </div>
+                    <div class="card-actions">
+                        <button class="action-btn" onclick="speakText('target')" title="Seslendir"><i class="fa-solid fa-volume-high"></i></button>
+                        <button class="action-btn btn-copy" onclick="copyTarget()" title="Kopyala"><i class="fa-solid fa-copy"></i></button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <textarea id="text-target" placeholder="Çeviri burada görünecek..." readonly></textarea>
+                    <div class="loading-overlay hidden" id="loading-target"><div class="spinner"></div></div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="app-footer">
+            <button class="mic-btn mic-green" id="btn-source" onclick="startListening('source')">
+                <i class="fa-solid fa-microphone"></i>
+                <span id="label-source">TR</span>
+            </button>
+            <button class="mic-btn mic-red" id="btn-target" onclick="startListening('target')">
+                <i class="fa-solid fa-microphone"></i>
+                <span id="label-target">ZH</span>
+            </button>
+        </footer>
+
+        <!-- Ayarlar: Hedef Dil Seçimi -->
+        <div id="settings-modal" class="modal hidden">
+            <div class="modal-overlay" onclick="toggleSettings()"></div>
+            <div class="modal-sheet">
+                <div class="sheet-header">
+                    <h3>Hedef Dil Seç</h3>
+                    <button class="close-btn" onclick="toggleSettings()">Bitti</button>
+                </div>
+                <div class="sheet-content" id="lang-list">
+                    <div class="lang-item" data-code="zh-CN">
+                        <span>🇨🇳 Çince (Çin)</span>
+                        <button class="dl-btn downloaded" onclick="selectLang('zh-CN')">Aktif</button>
+                    </div>
+                    <div class="lang-item" data-code="ur-PK">
+                        <span>🇵🇰 Urduca (Pakistan)</span>
+                        <button class="dl-btn" onclick="selectLang('ur-PK')">Seç</button>
+                    </div>
+                    <div class="lang-item" data-code="ne-NP">
+                        <span>🇳🇵 Nepalce (Nepal)</span>
+                        <button class="dl-btn" onclick="selectLang('ne-NP')">Seç</button>
+                    </div>
+                    <div class="lang-item" data-code="hi-IN">
+                        <span>🇮🇳 Hintçe (Hindistan)</span>
+                        <button class="dl-btn" onclick="selectLang('hi-IN')">Seç</button>
+                    </div>
+                    <div class="lang-item" data-code="pl-PL">
+                        <span>🇵🇱 Lehçe (Polonya)</span>
+                        <button class="dl-btn" onclick="selectLang('pl-PL')">Seç</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
